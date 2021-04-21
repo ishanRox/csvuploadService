@@ -6,6 +6,7 @@ import { VehicalModule } from './vehicalData/vehical.module';
 import { CsvUploadModule } from './csvUpload/csvUpload.module';
 import { DbjobService } from './dbjob/dbjob.service';
 
+
 @Module({
   imports: [TypeOrmModule.forRoot(),VehicalModule, CsvUploadModule],
   controllers: [AppController],

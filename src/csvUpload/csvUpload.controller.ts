@@ -7,12 +7,8 @@ import { VehicalService } from "src/vehicalData/vehical.service";
 
 @Controller("csv")
 export class CsvUploadController {
-
-
-  constructor(private dbjobService: DbjobService,private vehicalService: VehicalService) {
-
-  }
-
+  constructor(private dbjobService: DbjobService,private vehicalService: VehicalService) {}
+  
   @Post("upload")
   @UseInterceptors(FileInterceptor("file", {
     storage: diskStorage({
@@ -28,6 +24,7 @@ export class CsvUploadController {
   
   async uploadSingle(@UploadedFile() file) {
     console.log(file);
+    console.log('saving started');
     this.dbjobService.saveCsvToPostgres(file);
 
   }

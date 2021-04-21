@@ -8,35 +8,17 @@ export class DbjobService {
     Queue = require('bull');
 
 
-
-
     constructor(private vehicalService: VehicalService) {
-
     }
 
     async saveCsvToPostgres(fileInfo) {
-        var vs = this.vehicalService;
+        var vehicalService = this.vehicalService;
 
-        var videoQueue = new this.Queue('csvJobs', 'redis://127.0.0.1:6379');
+        var csvQueue = new this.Queue('csvJobs', 'redis://127.0.0.1:6379');
 
-        videoQueue.process(async function (job, done) {
+        csvQueue.process(async function (job, done) {
             try {
-                // const vehicalRows = [];
-                //streams dont await
-                // require('fs').createReadStream(job.data.path)
-                //     .pipe(require('csv-parser')())
-                //     .on('data', async (row) => {
-                //         console.log(row);
-                //         //                      const result=  await vs.create(row);
-
-                //         //                      console.log(result+"LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
-                //         // vehicalRows.push(row);
-                //     })
-                //     .on('end', () => {
-                //         console.log('CSV file successfully processed');
-
-                //     });
-
+                
                 const fs = require('fs');
                 const getStream = require('get-stream');
                 const parse = require('csv-parse');
@@ -65,7 +47,7 @@ export class DbjobService {
                         };
                         console.log(dto);
 
-                        const dbrow = await vs.create(dto);
+                        const dbrow = await vehicalService.create(dto);
                         console.log(dbrow);
                     });
 
@@ -79,7 +61,7 @@ export class DbjobService {
 
         });
 
-        const myJob = await videoQueue.add(fileInfo, { delay: 5000 });
+        const myJob = await csvQueue.add(fileInfo, { delay: 5000 });
         let status = await myJob.finished();
         console.log(status);
 
