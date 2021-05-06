@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { json } from 'express';
 import { VehicalService } from 'src/vehicalData/vehical.service';
 
 @Injectable()
@@ -12,13 +13,14 @@ export class DbjobService {
     }
 
     async saveCsvToPostgres(fileInfo) {
+        console.log("before" + JSON.stringify(fileInfo));
         var vehicalService = this.vehicalService;
 
         var csvQueue = new this.Queue('csvJobs', 'redis://127.0.0.1:6379');
 
         csvQueue.process(async function (job, done) {
             try {
-                
+
                 const fs = require('fs');
                 const getStream = require('get-stream');
                 const parse = require('csv-parse');
